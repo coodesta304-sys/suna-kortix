@@ -9,6 +9,18 @@ services:
         value: 3.11.0
       - key: ENV_MODE
         value: production
+      - key: SUPABASE_URL
+        value: https://mffcydkfcwgqfnagfnhm.supabase.co
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mZmN5ZGtmY3dncWZuYWdmbmhtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDU0ODA0NCwiZXhwIjoyMDkwMTI0MDQ0fQ.EGIMLJrZqm-Nx14IzLev3gylu7L5zY8YJ8b0gYfR4eM
+      - key: REDIS_URL
+        value: redis://default:gQAAAAAAAU4OAAIncDI2OWRjY2IxMTYyNjI0MmEzODQ2ODMwNDU2MDk2NWI1NnAyODU1MTg@assuring-vulture-85518.upstash.io:6379
+      - key: WAVESPEED_API_KEY
+        value: d99bc633ce3fa8a8e9f003328fc61c9e44c4eb1e458d2c2c61bcfda8a4b2b047
+      - key: COMPOSIO_API_KEY
+        value: ck_xek0K6I6iGXOBCROV-DC
+      - key: FERNET_KEY
+        value: H0K0N0-8N0K0N0-8N0K0N0-8N0K0N0-8N0K0N0-8N0K0N0-8N0K0N0-8N0K0N0
   - type: web
     name: suna-frontend
     env: node
@@ -17,3 +29,9 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22.13.0
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://mffcydkfcwgqfnagfnhm.supabase.co
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mZmN5ZGtmY3dncWZuYWdmbmhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDgwNDQsImV4cCI6MjA5MDEyNDA0NH0.SSYf2n1r_X3e3LHcRv5oOyqTbsfWNQcLNfX0CVU7E20
+      - key: NEXT_PUBLIC_API_URL
+        value: https://suna-backend.onrender.com
