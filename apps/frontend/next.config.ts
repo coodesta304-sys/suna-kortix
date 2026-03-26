@@ -14,7 +14,7 @@ const getBackendUrl = (): string => {
   
   // Production environment
   if (vercelEnv === 'production') {
-    return 'https://api.kortix.com/v1';
+    return 'process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"';
   }
   
   // Preview deployments (non-main branches)
@@ -29,7 +29,7 @@ const getBackendUrl = (): string => {
   }
 
   // Main branch / staging (default)
-  return 'https://staging-api.kortix.com/v1';
+  return 'process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"';
 };
 
 const nextConfig = (): NextConfig => ({
