@@ -65,6 +65,10 @@ WORKDIR /app
 ENV NEXT_PUBLIC_VERCEL_ENV=production
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_SUPABASE_URL=https://mffcydkfcwgqfnagfnhm.supabase.co
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mZmN5ZGtmY3dncWZuYWdmbmhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDgwNDQsImV4cCI6MjA5MDEyNDA0NH0.SSYf2n1r_X3e3LHcRv5oOyqTbsfWNQcLNfX0CVU7E20
+ENV NEXT_PUBLIC_API_URL=https://suna-backend-production.up.railway.app/v1
+ENV NEXT_PUBLIC_ENV_MODE=local
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
