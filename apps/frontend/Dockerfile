@@ -51,6 +51,9 @@ ENV NEXT_PUBLIC_SUPABASE_URL=https://mffcydkfcwgqfnagfnhm.supabase.co
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mZmN5ZGtmY3dncWZuYWdmbmhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDgwNDQsImV4cCI6MjA5MDEyNDA0NH0.SSYf2n1r_X3e3LHcRv5oOyqTbsfWNQcLNfX0CVU7E20
 ENV NEXT_PUBLIC_APP_URL=https://suna-frontend-production-d1da.up.railway.app
 ENV NEXT_PUBLIC_URL=https://suna-frontend-production-d1da.up.railway.app
+ENV NEXT_PUBLIC_ENV_MODE=local
+ENV NEXT_PUBLIC_API_URL=https://suna-backend-production.up.railway.app/v1
+ENV MAIN_LLM=wavespeed
 
 RUN corepack enable pnpm && pnpm run build
 
