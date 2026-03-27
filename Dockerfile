@@ -39,8 +39,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc* ./
 COPY apps ./apps
 COPY packages ./packages
 
-# Install frontend dependencies
-RUN pnpm install --filter ./apps/frontend --frozen-lockfile
+# Install frontend dependencies (all workspace packages including shared)
+RUN pnpm install --frozen-lockfile
 
 # Build frontend
 WORKDIR /app/apps/frontend
