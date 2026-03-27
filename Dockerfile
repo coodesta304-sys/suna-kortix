@@ -1,5 +1,5 @@
 # syntax=docker.io/docker/dockerfile:1
-FROM python:3.11-slim AS base
+FROM python:3.11-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -8,18 +8,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     pkg-config \
     python3-dev \
-    freetype-dev \
-    gcc \
-    linux-headers \
-    musl-dev \
-    pango \
-    cairo \
-    gdk-pixbuf \
-    libffi \
-    fontconfig \
+    libpq-dev \
+    libffi-dev \
+    libjpeg-dev \
+    libpng-dev \
+    fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
+# Install Node.js 22
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
     rm -rf /var/lib/apt/lists/*
