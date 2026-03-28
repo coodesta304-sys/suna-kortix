@@ -283,6 +283,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     lifespan=lifespan,
+    redirect_slashes=False,
     swagger_ui_parameters={
         "persistAuthorization": True,  # Keep auth between page refreshes
     },
