@@ -46,22 +46,20 @@ async def _fetch_jwks() -> Dict:
     
     if not supabase_url:
         raise ValueError("SUPABASE_URL not configured")
-    if not supabase_anon_key:
-        raise ValueError("SUPABASE_ANON_KEY not configured")
     
-    # Supabase JWKS endpoint (standard OAuth2/OIDC .well-known path)
+    # Supabase JWKS endpoint (standard OAuth2/OIDC .well-known path - public endpoint)
     jwks_url = f"{supabase_url.rstrip('/')}/auth/v1/.well-known/jwks.json"
     
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
-            # Supabase requires the anon key in the 'apikey' header
-            response = await client.get(
-                jwks_url,
-                headers={
-                    "apikey": supabase_anon_key,
-                    "Accept": "application/json"
-                }
-            )
+            headers = {"Accept": "application/json"}
+            if supabase_anon_key:
+                headers["apikey"] = supabase_anon_key
+            response = await client.get(jwks_url, headers=headers)
+            # If apikey was rejected, retry without it (JWKS is a public endpoint)
+            if response.status_code in (401, 403) and supabase_anon_key:
+                logger.warning(f"JWKS fetch with apikey returned {response.status_code}, retrying without apikey")
+                response = await client.get(jwks_url, headers={"Accept": "application/json"})
             response.raise_for_status()
             jwks = response.json()
             
@@ -210,6 +208,15 @@ async def _decode_jwt_with_verification_async(token: str) -> dict:
             raise HTTPException(
                 status_code=401,
                 detail="Invalid token",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"ES256 token verification failed (network/JWKS error): {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="Authentication service temporarily unavailable",
                 headers={"WWW-Authenticate": "Bearer"}
             )
     
