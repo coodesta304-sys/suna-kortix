@@ -54,6 +54,7 @@ ENV NEXT_PUBLIC_URL=https://suna-frontend-production-d1da.up.railway.app
 ENV NEXT_PUBLIC_ENV_MODE=local
 ENV NEXT_PUBLIC_API_URL=https://suna-frontend-production-d1da.up.railway.app/backend/v1
 ENV NEXT_PUBLIC_BACKEND_URL=https://suna-frontend-production-d1da.up.railway.app/backend
+ENV BACKEND_INTERNAL_URL=http://suna-backend.railway.internal:8000
 ENV MAIN_LLM=wavespeed
 
 RUN corepack enable pnpm && pnpm run build
