@@ -71,7 +71,7 @@ ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 ENV NEXT_PUBLIC_API_URL=https://suna-frontend-production-d1da.up.railway.app/backend/v1
 ENV NEXT_PUBLIC_BACKEND_URL=https://suna-frontend-production-d1da.up.railway.app/backend
 ENV NEXT_PUBLIC_ENV_MODE=local
-ENV BACKEND_INTERNAL_URL=https://suna-backend-production-76c3.up.railway.app
+ENV BACKEND_INTERNAL_URL=http://suna-backend.railway.internal:8000
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
