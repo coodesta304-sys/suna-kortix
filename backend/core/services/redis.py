@@ -194,19 +194,30 @@ class RedisClient:
     def _get_config(self) -> Dict[str, Any]:
         load_dotenv()
         
-        redis_host = os.getenv("REDIS_HOST", "localhost")
-        redis_port = int(os.getenv("REDIS_PORT", 6379))
-        redis_password = os.getenv("REDIS_PASSWORD", "")
-        redis_username = os.getenv("REDIS_USERNAME", None)
-        redis_ssl = os.getenv("REDIS_SSL", "false").lower() == "true"
-        
-        scheme = "rediss" if redis_ssl else "redis"
-        if redis_username and redis_password:
-            redis_url = f"{scheme}://{redis_username}:{redis_password}@{redis_host}:{redis_port}"
-        elif redis_password:
-            redis_url = f"{scheme}://:{redis_password}@{redis_host}:{redis_port}"
+        redis_url_env = os.getenv("REDIS_URL")
+        if redis_url_env:
+            from urllib.parse import urlparse
+            parsed = urlparse(redis_url_env)
+            redis_host = parsed.hostname or "localhost"
+            redis_port = parsed.port or 6379
+            redis_password = parsed.password or ""
+            redis_username = parsed.username or None
+            redis_ssl = redis_url_env.startswith("rediss://")
+            redis_url = redis_url_env
         else:
-            redis_url = f"{scheme}://{redis_host}:{redis_port}"
+            redis_host = os.getenv("REDIS_HOST", "localhost")
+            redis_port = int(os.getenv("REDIS_PORT", 6379))
+            redis_password = os.getenv("REDIS_PASSWORD", "")
+            redis_username = os.getenv("REDIS_USERNAME", None)
+            redis_ssl = os.getenv("REDIS_SSL", "false").lower() == "true"
+            
+            scheme = "rediss" if redis_ssl else "redis"
+            if redis_username and redis_password:
+                redis_url = f"{scheme}://{redis_username}:{redis_password}@{redis_host}:{redis_port}"
+            elif redis_password:
+                redis_url = f"{scheme}://:{redis_password}@{redis_host}:{redis_port}"
+            else:
+                redis_url = f"{scheme}://{redis_host}:{redis_port}"
         
         return {
             "host": redis_host,
