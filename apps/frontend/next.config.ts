@@ -89,6 +89,7 @@ const nextConfig = (): NextConfig => ({
   },
   
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
     return [
       {
         source: '/ingest/static/:path*',
@@ -101,6 +102,10 @@ const nextConfig = (): NextConfig => ({
       {
         source: '/ingest/flags',
         destination: 'https://eu.i.posthog.com/flags',
+      },
+      {
+        source: '/backend/:path*',
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },
