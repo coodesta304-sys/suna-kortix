@@ -155,32 +155,53 @@ async def lifespan(app: FastAPI):
             logger.error(f"Failed to initialize MCP/template APIs: {e}")
         
         # Start CloudWatch worker metrics publisher (production only)
-        if config.ENV_MODE == EnvMode.PRODUCTION:
-            from core.services import worker_metrics
-            _worker_metrics_task = asyncio.create_task(worker_metrics.start_cloudwatch_publisher())
+        try:
+            if config.ENV_MODE == EnvMode.PRODUCTION:
+                from core.services import worker_metrics
+                _worker_metrics_task = asyncio.create_task(worker_metrics.start_cloudwatch_publisher())
+        except Exception as e:
+            logger.error(f"Failed to start CloudWatch publisher: {e}")
         
         # Start Redis stream cleanup task (catches orphaned streams with no TTL)
-        from core.services import worker_metrics
-        _stream_cleanup_task = asyncio.create_task(worker_metrics.start_stream_cleanup_task())
+        try:
+            from core.services import worker_metrics
+            _stream_cleanup_task = asyncio.create_task(worker_metrics.start_stream_cleanup_task())
+        except Exception as e:
+            logger.error(f"Failed to start stream cleanup task: {e}")
         
         # Start memory watchdog for observability
-        _memory_watchdog_task = asyncio.create_task(_memory_watchdog())
+        try:
+            _memory_watchdog_task = asyncio.create_task(_memory_watchdog())
+        except Exception as e:
+            logger.error(f"Failed to start memory watchdog: {e}")
         
         # Log system metrics to CloudWatch every 5 minutes (logger ships to CloudWatch)
-        _metrics_logger_task = asyncio.create_task(_metrics_logger_loop())
+        try:
+            _metrics_logger_task = asyncio.create_task(_metrics_logger_loop())
+        except Exception as e:
+            logger.error(f"Failed to start metrics logger: {e}")
         
         # Start sandbox pool service (maintains pre-warmed sandboxes)
-        from core.sandbox.pool_background import start_pool_service
-        asyncio.create_task(start_pool_service())
+        try:
+            from core.sandbox.pool_background import start_pool_service
+            asyncio.create_task(start_pool_service())
+        except Exception as e:
+            logger.error(f"Failed to start sandbox pool service: {e}")
 
         # Start conversation analytics worker
-        from core.analytics.conversation_analytics_worker import start_analytics_worker
-        asyncio.create_task(start_analytics_worker())
+        try:
+            from core.analytics.conversation_analytics_worker import start_analytics_worker
+            asyncio.create_task(start_analytics_worker())
+        except Exception as e:
+            logger.error(f"Failed to start analytics worker: {e}")
         
         # Initialize stateless pipeline
-        from core.agents.pipeline.stateless import lifecycle
-        await lifecycle.initialize()
-        logger.info("[STARTUP] Stateless pipeline initialized")
+        try:
+            from core.agents.pipeline.stateless import lifecycle
+            await lifecycle.initialize()
+            logger.info("[STARTUP] Stateless pipeline initialized")
+        except Exception as e:
+            logger.error(f"Failed to initialize stateless pipeline: {e}")
         
         yield
 
