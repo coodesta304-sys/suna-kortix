@@ -76,21 +76,18 @@ function detectMobilePlatformFromUA(userAgent: string | null): 'ios' | 'android'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // 🚀 HYPER-FAST: Mobile app store redirect for /milano, /berlin, and /app
+  // 🚀 HYPER-FAST: Mobile app store redirect for /milano and /berlin
   // This runs at the edge before ANY page rendering
-  if (pathname === '/milano' || pathname === '/berlin' || pathname === '/app') {
+  // NOTE: /app redirect is handled client-side to avoid RSC prefetch CORS issues
+  if (pathname === '/milano' || pathname === '/berlin') {
     const userAgent = request.headers.get('user-agent');
     const platform = detectMobilePlatformFromUA(userAgent);
     
     if (platform) {
-      // Skip external redirect for RSC prefetch requests (would cause CORS error)
-      const isRscRequest = request.headers.get('RSC') === '1' || request.nextUrl.searchParams.has('_rsc');
-      if (!isRscRequest) {
-        // Instant 302 redirect to app store - no page load needed
-        return NextResponse.redirect(APP_STORE_LINKS[platform], { status: 302 });
-      }
+      // Instant 302 redirect to app store - no page load needed
+      return NextResponse.redirect(APP_STORE_LINKS[platform], { status: 302 });
     }
-    // Desktop users and RSC requests continue to the full page
+    // Desktop users continue to the full page
   }
 
   // Block access to WIP /thread/new route - redirect to dashboard

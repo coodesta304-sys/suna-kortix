@@ -6,8 +6,7 @@ import { motion } from 'framer-motion';
 import { AppDownloadQR, APP_DOWNLOAD_URL } from '@/components/common/app-download-qr';
 import { SimpleFooter } from '@/components/home/simple-footer';
 
-// Mobile users are redirected at the edge by middleware (hyper-fast)
-// This page only renders for desktop users
+// Mobile users are redirected client-side via useEffect below
 
 const STORE_LINKS = {
   ios: 'https://apps.apple.com/ie/app/kortix/id6754448524',
@@ -58,6 +57,15 @@ export default function AppDownloadPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (/android/.test(ua)) {
+      window.location.href = STORE_LINKS.android;
+      return;
+    }
+    if (/iphone|ipad|ipod/.test(ua)) {
+      window.location.href = STORE_LINKS.ios;
+      return;
+    }
     setMounted(true);
   }, []);
 
