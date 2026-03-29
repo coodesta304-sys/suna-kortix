@@ -83,10 +83,14 @@ export async function middleware(request: NextRequest) {
     const platform = detectMobilePlatformFromUA(userAgent);
     
     if (platform) {
-      // Instant 302 redirect to app store - no page load needed
-      return NextResponse.redirect(APP_STORE_LINKS[platform], { status: 302 });
+      // Skip external redirect for RSC prefetch requests (would cause CORS error)
+      const isRscRequest = request.headers.get('RSC') === '1' || request.nextUrl.searchParams.has('_rsc');
+      if (!isRscRequest) {
+        // Instant 302 redirect to app store - no page load needed
+        return NextResponse.redirect(APP_STORE_LINKS[platform], { status: 302 });
+      }
     }
-    // Desktop users continue to the full page
+    // Desktop users and RSC requests continue to the full page
   }
 
   // Block access to WIP /thread/new route - redirect to dashboard
